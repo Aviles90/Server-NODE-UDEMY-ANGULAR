@@ -3,6 +3,15 @@ const { validationResult } = require('express-validator');
 
 const crearUsuario = (req,res = response) => { //response lo usaremos como un tipado, es comp`letamente opcional
 
+    const errors = validationResult( req );
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            ok: false,
+            errors: errors.mapped()
+        })
+    }
+
     console.log( req.body );
     const {email, name, password} = req.body; //forma de capturar el body
     console.log(email, name, password);
