@@ -1,4 +1,5 @@
-const{ response } = require('express')
+const{ response } = require('express');
+const { validationResult } = require('express-validator');
 
 const crearUsuario = (req,res = response) => { //response lo usaremos como un tipado, es comp`letamente opcional
 
@@ -12,7 +13,18 @@ const crearUsuario = (req,res = response) => { //response lo usaremos como un ti
     });
 }
 
-const loginUsuario = (req,res) => {    
+const loginUsuario = (req,res = response) => {    
+
+    const errors = validationResult( req );
+    // console.log(errors);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            ok: false,
+            errors: errors.mapped()
+        })
+    }
+
     const {email, password} = req.body;
     console.log(email, password);
 
@@ -22,7 +34,7 @@ const loginUsuario = (req,res) => {
     });
 }
 
-const revalidarToken = (req,res) => {
+const revalidarToken = (req,res = response) => {
     return res.json({
         ok: true,
         msg: 'Renew'

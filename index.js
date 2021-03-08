@@ -8,7 +8,6 @@ const app = express();
 //DIRECTORIO PUBLICO
 app.use(express.static('public'));
 
-
 //CORS
 app.use( cors() );
 
