@@ -1,6 +1,7 @@
 const{ response } = require('express');
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
+const { generarJWT } = require('../helpers/jwt');
 
 const crearUsuario = async(req,res = response) => { //response lo usaremos como un tipado, es comp`letamente opcional
     // console.log( req.body );
@@ -26,6 +27,7 @@ const crearUsuario = async(req,res = response) => { //response lo usaremos como 
             dbUser.password = bcrypt.hashSync( password, salt )
 
         //Generar el JSON Web Token
+            const token = await generarJWT( dbUser.id, name )
 
         //Crear Usuario en BD
             await dbUser.save();
@@ -34,14 +36,15 @@ const crearUsuario = async(req,res = response) => { //response lo usaremos como 
         return res.status(201).json({
             ok: true,
             uid: dbUser.id,
-            name
+            name,
+            token
         })
         
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             ok: false,
-            msg: 'Algo salio mal, comuniqiese con el administrador'
+            msg: 'Algo salio mal, comuniquese con el administrador'
         });
     }
 }
