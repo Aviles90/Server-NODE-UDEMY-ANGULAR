@@ -1,5 +1,6 @@
 const{ response } = require('express');
-const Usuario = require('../models/Usuario')
+const Usuario = require('../models/Usuario');
+const bcrypt = require('bcryptjs');
 
 const crearUsuario = async(req,res = response) => { //response lo usaremos como un tipado, es comp`letamente opcional
     // console.log( req.body );
@@ -20,6 +21,9 @@ const crearUsuario = async(req,res = response) => { //response lo usaremos como 
             const dbUser = new Usuario( req.body );
 
         // Hashear la contraseña
+            // const salt = bcrypt.genSaltSync(10);
+            const salt = bcrypt.genSaltSync();
+            dbUser.password = bcrypt.hashSync( password, salt )
 
         //Generar el JSON Web Token
 
