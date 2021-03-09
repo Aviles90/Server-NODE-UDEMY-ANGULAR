@@ -96,10 +96,19 @@ const loginUsuario = async(req,res = response) => {
     }
 }
 
-const revalidarToken = (req,res = response) => {
+const revalidarToken = async(req,res = response) => {
+
+    //obtengo los valores desde el middleware
+    const { uid, name } = req;
+
+    // generar el JSON WEB TOKEN
+    const token = await generarJWT( uid, name )
+
     return res.json({
         ok: true,
-        msg: 'Renew'
+        uid,
+        name,
+        token
     });
 }
 
